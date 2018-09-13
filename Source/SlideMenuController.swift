@@ -19,10 +19,10 @@ import UIKit
 }
 
 public struct SlideMenuOptions {
-    public static var leftViewWidth: CGFloat = 270.0
+    public static var leftViewWidth: CGFloat = 304
     public static var leftBezelWidth: CGFloat? = 16.0
     public static var contentViewScale: CGFloat = 0.96
-    public static var contentViewOpacity: CGFloat = 0.5
+    public static var contentViewOpacity: CGFloat = 0.4
     public static var contentViewDrag: Bool = false
     public static var shadowOpacity: CGFloat = 0.0
     public static var shadowRadius: CGFloat = 0.0
@@ -30,10 +30,10 @@ public struct SlideMenuOptions {
     public static var panFromBezel: Bool = true
     public static var animationDuration: CGFloat = 0.4
     public static var animationOptions: UIViewAnimationOptions = []
-    public static var rightViewWidth: CGFloat = 270.0
+    public static var rightViewWidth: CGFloat = 304
     public static var rightBezelWidth: CGFloat? = 16.0
     public static var rightPanFromBezel: Bool = true
-    public static var hideStatusBar: Bool = true
+    public static var hideStatusBar: Bool = false
     public static var pointOfNoReturnWidth: CGFloat = 44.0
     public static var simultaneousGestureRecognizers: Bool = true
 	public static var opacityViewBackgroundColor: UIColor = UIColor.black
@@ -215,6 +215,11 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     open override var preferredStatusBarStyle: UIStatusBarStyle {
+        if isLeftOpen() {
+            return self.leftViewController?.preferredStatusBarStyle ?? .default
+        } else if isRightOpen() {
+            return self.rightViewController?.preferredStatusBarStyle ?? .default
+        }
         return self.mainViewController?.preferredStatusBarStyle ?? .default
     }
     
@@ -541,6 +546,7 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
                     strongSelf.leftViewController?.endAppearanceTransition()
                     strongSelf.delegate?.leftDidOpen?()
                 }
+                self?.setNeedsStatusBarAppearanceUpdate()
         }
     }
     
@@ -574,6 +580,7 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
                     strongSelf.rightViewController?.endAppearanceTransition()
                     strongSelf.delegate?.rightDidOpen?()
                 }
+                self?.setNeedsStatusBarAppearanceUpdate()
         }
     }
     
@@ -604,6 +611,7 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
                     strongSelf.leftViewController?.endAppearanceTransition()
                     strongSelf.delegate?.leftDidClose?()
                 }
+                self?.setNeedsStatusBarAppearanceUpdate()
         }
     }
     
@@ -635,6 +643,7 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
                     strongSelf.rightViewController?.endAppearanceTransition()
                     strongSelf.delegate?.rightDidClose?()
                 }
+                self?.setNeedsStatusBarAppearanceUpdate()
         }
     }
     
